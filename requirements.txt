@@ -1,0 +1,7 @@
+pymupdf
+sentence-transformers
+langchain-groq
+langchain
+streamlit
+numpy
+python-dotenv
