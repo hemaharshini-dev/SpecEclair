@@ -7,6 +7,7 @@ import os
 import re
 import pickle
 import sys
+import logging
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -14,10 +15,14 @@ os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 import fitz
 from sentence_transformers import SentenceTransformer
+from src.config import PDF_PATH, INDEX_PATH, EMBED_MODEL_NAME
 
-PDF_PATH = os.path.join(os.path.dirname(__file__), "..", "dataset.pdf")
-INDEX_PATH = os.path.join(os.path.dirname(__file__), "..", "index", "chunks.pkl")
-EMBED_MODEL = "all-MiniLM-L6-v2"
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 HEADER_RE = re.compile(r"SUMMARY\s+OF", re.IGNORECASE)
 IS_ID_RE = re.compile(r"IS\s+(\d+(?:\s*\(Part\s*\d+\))?)\s*[:\s]\s*(\d{4})", re.IGNORECASE)
@@ -29,27 +34,40 @@ def fix_part_case(s: str) -> str:
 
 
 def normalize_id(raw: str) -> str:
+    # Remove extra whitespace
+    raw = re.sub(r"\s+", " ", raw.strip())
+    # Handle different separators between number and year
+    raw = re.sub(r"[:\-]\s*", ": ", raw)
+    
     m = IS_ID_RE.search(raw)
     if not m:
         return raw.strip()
-    number = re.sub(r"\s+", " ", m.group(1).strip())
+    
+    number = m.group(1).strip()
+    # Ensure space before (Part ...)
+    number = re.sub(r"(\d+)\s*\(", r"\1 (", number)
     # Fix PART -> Part
     number = re.sub(r"\(PART\s*(\d+)\)", lambda m2: f"(Part {m2.group(1)})", number, flags=re.IGNORECASE)
+    
     year = m.group(2).strip()
     return f"IS {number}: {year}"
 
 
-def extract_title(text_after_id: str) -> str:
-    title = text_after_id.strip()
-    title = re.sub(r"\(.*?revision.*?\)", "", title, flags=re.IGNORECASE).strip()
+def extract_title(text: str) -> str:
+    # Remove standard ID prefix if present
+    text = re.sub(r"^IS\s+\d+.*?:\s*\d{4}\s*", "", text, flags=re.IGNORECASE).strip()
+    
+    title = re.sub(r"\(.*?revision.*?\)", "", text, flags=re.IGNORECASE).strip()
     # Take only first line
     title = title.split("\n")[0].strip()
+    # Remove any leading dashes or colons
+    title = re.sub(r"^[ \-:]+", "", title).strip()
     return title if title else "BIS Standard"
 
 
 def parse_pdf(pdf_path: str) -> list:
     doc = fitz.open(pdf_path)
-    print(f"PDF loaded: {doc.page_count} pages")
+    logger.info(f"PDF loaded: {doc.page_count} pages")
 
     # Build full text from page 13 onward (skip front matter)
     full_text = ""
@@ -62,9 +80,10 @@ def parse_pdf(pdf_path: str) -> list:
 
     boundaries = [m.start() for m in re.finditer(HEADER_RE, full_text)]
     if not boundaries:
-        sys.exit("ERROR: No 'SUMMARY OF' headers found. Check PDF path.")
+        logger.error("No 'SUMMARY OF' headers found. Check PDF path.")
+        sys.exit(1)
 
-    print(f"Found {len(boundaries)} standard boundaries")
+    logger.info(f"Found {len(boundaries)} standard boundaries")
 
     chunks = []
     for idx, start in enumerate(boundaries):
@@ -96,26 +115,26 @@ def parse_pdf(pdf_path: str) -> list:
             "page_start": page_start,
         })
 
-    print(f"Parsed {len(chunks)} standard chunks")
+    logger.info(f"Parsed {len(chunks)} standard chunks")
     return chunks
 
 
 def embed_chunks(chunks: list) -> list:
-    print(f"Loading embedding model: {EMBED_MODEL}")
-    model = SentenceTransformer(EMBED_MODEL)
+    logger.info(f"Loading embedding model: {EMBED_MODEL_NAME}")
+    model = SentenceTransformer(EMBED_MODEL_NAME)
 
     texts = [
         f"{c['standard_id']} {c['title']}\n{c['text'][:2000]}"
         for c in chunks
     ]
 
-    print(f"Embedding {len(texts)} chunks...")
+    logger.info(f"Embedding {len(texts)} chunks...")
     embeddings = model.encode(texts, batch_size=64, show_progress_bar=True, normalize_embeddings=True)
 
     for chunk, emb in zip(chunks, embeddings):
         chunk["embedding"] = emb.tolist()
 
-    print(f"Embedding complete.")
+    logger.info("Embedding complete.")
     return chunks
 
 
@@ -127,7 +146,7 @@ def main():
     with open(INDEX_PATH, "wb") as f:
         pickle.dump(chunks, f)
 
-    print(f"Index saved to {INDEX_PATH} ({len(chunks)} chunks)")
+    logger.info(f"Index saved to {INDEX_PATH} ({len(chunks)} chunks)")
 
 
 if __name__ == "__main__":

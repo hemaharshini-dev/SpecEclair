@@ -3,12 +3,11 @@
     "id": "PUB-01",
     "query": "We are a small enterprise manufacturing 33 Grade Ordinary Portland Cement. Which BIS standard covers the chemical and physical requirements for our product?",
     "retrieved_standards": [
-      "IS 8042: 1989",
-      "IS 8043: 1991",
-      "IS 12269: 1987",
-      "IS 12330: 1988"
+      "IS 269: 1989",
+      "IS 8112: 1989",
+      "IS 8043: 1991"
     ],
-    "latency_seconds": 0.7027,
+    "latency_seconds": 1.095,
     "expected_standards": [
       "IS 269: 1989"
     ]
@@ -18,10 +17,10 @@
     "query": "I need to comply with the regulations for coarse and fine aggregates derived from natural sources intended for use in structural concrete.",
     "retrieved_standards": [
       "IS 383: 1970",
-      "IS 9142: 1979",
+      "IS 6579: 1981",
       "IS 2686: 1977"
     ],
-    "latency_seconds": 0.8972,
+    "latency_seconds": 1.2424,
     "expected_standards": [
       "IS 383: 1970"
     ]
@@ -33,10 +32,9 @@
       "IS 458: 2003",
       "IS 784: 2001",
       "IS 7322: 1985",
-      "IS 7319: 1974",
-      "IS 11925: 1986"
+      "IS 7319: 1974"
     ],
-    "latency_seconds": 0.5673,
+    "latency_seconds": 1.8679,
     "expected_standards": [
       "IS 458: 2003"
     ]
@@ -47,9 +45,9 @@
     "retrieved_standards": [
       "IS 2185 (Part 1): 1979",
       "IS 2185 (Part 2): 1983",
-      "IS 3115: 1992"
+      "IS 12440: 1988"
     ],
-    "latency_seconds": 0.5577,
+    "latency_seconds": 1.0564,
     "expected_standards": [
       "IS 2185 (Part 2): 1983"
     ]
@@ -59,11 +57,11 @@
     "query": "Looking for the standard detailing corrugated and semi-corrugated asbestos cement sheets used for roofing and cladding.",
     "retrieved_standards": [
       "IS 459: 1992",
+      "IS 14871: 2000",
       "IS 13008: 1990",
-      "IS 13000: 1990",
       "IS 1626: 1984"
     ],
-    "latency_seconds": 0.6151,
+    "latency_seconds": 1.1093,
     "expected_standards": [
       "IS 459: 1992"
     ]
@@ -73,10 +71,10 @@
     "query": "What is the Indian Standard covering the manufacture, chemical, and physical requirements for Portland slag cement?",
     "retrieved_standards": [
       "IS 455: 1989",
-      "IS 8112: 1989",
-      "IS 12269: 1987"
+      "IS 269: 1989",
+      "IS 8043: 1991"
     ],
-    "latency_seconds": 0.5474,
+    "latency_seconds": 0.9187,
     "expected_standards": [
       "IS 455: 1989"
     ]
@@ -86,11 +84,11 @@
     "query": "We are setting up a plant to produce Portland pozzolana cement that is calcined clay based. What is the applicable standard?",
     "retrieved_standards": [
       "IS 1489 (Part 2): 1991",
-      "IS 1489 (Part 1): 1991",
-      "IS 8112: 1989",
-      "IS 12269: 1987"
+      "IS 269: 1989",
+      "IS 12269: 1987",
+      "IS 8112: 1989"
     ],
-    "latency_seconds": 0.5497,
+    "latency_seconds": 0.9383,
     "expected_standards": [
       "IS 1489 (Part 2): 1991"
     ]
@@ -100,11 +98,10 @@
     "query": "Which standard applies to masonry cement used for general purposes where mortars for masonry are required, but not intended for structural concrete?",
     "retrieved_standards": [
       "IS 3466: 1988",
-      "IS 2185 (Part 1): 1979",
-      "IS 2185 (Part 2): 1983",
-      "IS 3115: 1992"
+      "IS 2116: 1980",
+      "IS 2185 (Part 1): 1979"
     ],
-    "latency_seconds": 0.5993,
+    "latency_seconds": 0.8902,
     "expected_standards": [
       "IS 3466: 1988"
     ]
@@ -114,10 +111,10 @@
     "query": "Looking for the standard that details the composition, manufacture, and testing of supersulphated cement, particularly for marine works or aggressive water conditions.",
     "retrieved_standards": [
       "IS 6909: 1990",
-      "IS 8112: 1989",
-      "IS 6598: 1972"
+      "IS 6598: 1972",
+      "IS 455: 1989"
     ],
-    "latency_seconds": 0.4845,
+    "latency_seconds": 0.8888,
     "expected_standards": [
       "IS 6909: 1990"
     ]
@@ -127,12 +124,10 @@
     "query": "Our company manufactures White Portland cement for architectural and decorative purposes. Which standard governs its physical and chemical requirements?",
     "retrieved_standards": [
       "IS 8042: 1989",
-      "IS 8043: 1991",
-      "IS 8112: 1989",
-      "IS 8041: 1990",
-      "IS 12269: 1987"
+      "IS 269: 1989",
+      "IS 8043: 1991"
     ],
-    "latency_seconds": 0.8888,
+    "latency_seconds": 0.8182,
     "expected_standards": [
       "IS 8042: 1989"
     ]
