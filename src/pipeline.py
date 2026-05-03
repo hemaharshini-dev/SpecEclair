@@ -9,7 +9,6 @@ import sys
 import asyncio
 from typing import List
 
-from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
@@ -38,6 +37,7 @@ def _get_llm():
     global _llm, _structured_llm
     if _llm is None:
         logger.info(f"Initializing LLM: {LLM_MODEL_NAME}")
+        from langchain_groq import ChatGroq
         _llm = ChatGroq(
             model=LLM_MODEL_NAME,
             temperature=0,

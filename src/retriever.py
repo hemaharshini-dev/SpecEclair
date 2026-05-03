@@ -14,7 +14,6 @@ load_dotenv()
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from src.config import INDEX_PATH, EMBED_MODEL_NAME, TOP_K, ALPHA
 
 logger = logging.getLogger(__name__)
@@ -27,6 +26,9 @@ _model = None
 def _load_index():
     global _chunks, _embeddings, _model
 
+    if _chunks is not None:
+        return
+
     if not os.path.exists(INDEX_PATH):
         logger.error(f"Index not found at {INDEX_PATH}. Run: python src/ingest.py")
         sys.exit(1)
@@ -36,7 +38,9 @@ def _load_index():
 
     _chunks = data
     _embeddings = np.array([c["embedding"] for c in data], dtype=np.float32)
+
     logger.info(f"Loading embedding model: {EMBED_MODEL_NAME}")
+    from sentence_transformers import SentenceTransformer
     _model = SentenceTransformer(EMBED_MODEL_NAME)
     logger.info(f"Loaded index with {len(_chunks)} chunks")
 

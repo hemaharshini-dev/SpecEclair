@@ -34,6 +34,10 @@ def get_pipeline():
     pipeline._get_llm()
     return pipeline.arun
 
+# Pre-load the pipeline at startup (cached)
+with st.spinner("Initializing AI Engine..."):
+    arun_pipeline = get_pipeline()
+
 # ── Session State ──
 if "query_text" not in st.session_state:
     st.session_state.query_text = ""
